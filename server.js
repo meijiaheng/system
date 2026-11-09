@@ -1,40 +1,23 @@
 import 'dotenv/config';
-import express from 'express';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { createRepo } from './src/db/index.js';
-import { createTaskRouter } from './src/routes/tasks.js';
+import { createApp } from './src/app.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3000);
+const { app, repo } = await createApp();
 
-const repo = await createRepo();
+// Vercel 的 Node 运行时直接拿导出的 Express 应用当函数处理；
+// 本地运行时才真正监听端口。
+export default app;
 
-const app = express();
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+if (!process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`智能任务管理系统已启动：http://localhost:${PORT}  （数据层：${repo.driver}）`);
+  });
 
-// 元信息：页面右上角显示数据实际存放在哪
-app.get('/api/meta', (_req, res) => {
-  res.json({ driver: repo.driver });
-});
-
-app.use('/api/tasks', createTaskRouter(repo));
-
-// 统一错误处理
-app.use((err, _req, res, _next) => {
-  console.error('[error]', err);
-  res.status(500).json({ error: '服务器内部错误' });
-});
-
-const server = app.listen(PORT, () => {
-  console.log(`智能任务管理系统已启动：http://localhost:${PORT}  （数据层：${repo.driver}）`);
-});
-
-const shutdown = async () => {
-  server.close();
-  await repo.close();
-  process.exit(0);
-};
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
+  const shutdown = async () => {
+    server.close();
+    await repo.close();
+    process.exit(0);
+  };
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+}

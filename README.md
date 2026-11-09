@@ -13,6 +13,34 @@ Node.js + Supabase 实现的任务管理应用：输入框 + 优先级下拉添�
 - 已完成任务标题加删除线并置灰
 - 全部中文界面，适配移动端
 
+## 部署到 Vercel
+
+仓库已带 `vercel.json`，把 Express 应用注册为 Node 函数、`public/` 作为静态资源，导入仓库后可直接部署。
+
+**必须配置环境变量**（Vercel → Project → Settings → Environment Variables，Production 环境）：
+
+| Name | Value |
+| --- | --- |
+| `SUPABASE_URL` | `https://xxxx.supabase.co` |
+| `SUPABASE_ANON_KEY` | 你的 anon key |
+
+不加这两项，线上会退到本地 SQLite，而 Vercel 的文件系统是临时的，数据存不住。
+
+```bash
+npm i -g vercel
+vercel --prod      # 或在 Vercel 面板导入 GitHub 仓库，推送 main 自动部署
+```
+
+> 如果 `*.vercel.app` 在你所在网络打不开（连接超时），说明是域名不可达而非部署失败。绑定自定义域名，或直接用下面的单文件版。
+
+## 单文件版（无需后端 / 无需 Node）
+
+`standalone/index.html` 是一个自包含页面：浏览器直接调用 Supabase REST API，没有后端，双击即可运行，也可以丢到任意静态托管。
+
+- 打开前把文件顶部 `SUPABASE_URL`、`SUPABASE_KEY` 换成自己的项目；
+- 依赖 Supabase 侧允许匿名读写的 RLS 策略（见 `supabase/schema.sql`）；
+- 适合做演示、临时使用，或后端跑不起来时兜底。
+
 ## 快速开始
 
 ```bash
