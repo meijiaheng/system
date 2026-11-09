@@ -13,6 +13,11 @@ Node.js + Supabase 实现的任务管理应用：输入框 + 优先级下拉添�
 - 已完成任务标题加删除线并置灰
 - 全部中文界面，适配移动端
 
+## 在线演示
+
+- GitHub Pages（国内网络可用，浏览器直连 Supabase）：<https://meijiaheng.github.io/system/>
+- 该地址发布的是 `docs/index.html`，与 `standalone/index.html` 内容一致，改动时两份一起更新。
+
 ## 部署到 Vercel
 
 仓库已带 `vercel.json`，把 Express 应用注册为 Node 函数、`public/` 作为静态资源，导入仓库后可直接部署。
