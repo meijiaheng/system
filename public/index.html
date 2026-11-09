@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智能任务管理系统</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div>
+        <h1>智能任务管理系统</h1>
+        <p class="subtitle">按优先级安排待办，专注当下最重要的事</p>
+      </div>
+      <div class="driver" id="driver" title="当前数据存放位置">数据源：加载中…</div>
+    </header>
+
+    <!-- 添加任务 -->
+    <section class="card add-card">
+      <form id="add-form" class="add-form" autocomplete="off">
+        <input
+          id="title-input"
+          class="title-input"
+          type="text"
+          maxlength="120"
+          placeholder="要做什么？例如：完成软件测试用例评审"
+          required
+        />
+        <select id="priority-select" class="priority-select" aria-label="优先级">
+          <option value="高">高优先级</option>
+          <option value="中" selected>中优先级</option>
+          <option value="低">低优先级</option>
+        </select>
+        <button type="submit" class="btn-primary">添加任务</button>
+      </form>
+      <p class="form-tip" id="form-tip"></p>
+    </section>
+
+    <!-- 筛选 -->
+    <section class="toolbar">
+      <div class="filters" id="filters">
+        <button class="filter active" data-filter="all">全部<i id="count-all">0</i></button>
+        <button class="filter" data-filter="高">高<i id="count-高">0</i></button>
+        <button class="filter" data-filter="中">中<i id="count-中">0</i></button>
+        <button class="filter" data-filter="低">低<i id="count-低">0</i></button>
+      </div>
+      <span class="summary" id="summary"></span>
+    </section>
+
+    <!-- 任务列表 -->
+    <section class="card list-card">
+      <ul class="task-list" id="task-list"></ul>
+      <div class="empty" id="empty" hidden>
+        <div class="empty-icon">✓</div>
+        <p>这里还没有任务，先添加一条吧</p>
+      </div>
+    </section>
+
+    <footer class="footer">Node.js + Supabase · 数据实时保存</footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
